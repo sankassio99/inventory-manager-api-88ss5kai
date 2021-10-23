@@ -13,6 +13,9 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => '/api'], function () use ($router) {
+    $router->group(['prefix' => '/produto'], function () use ($router) {
+        $router->get('', 'Controller@index');
+        $router->post('', 'Controller@store');
+    });
 });
