@@ -26,5 +26,40 @@ class Controller extends BaseController
             201
         );
     }
+
+    public function update(int $id, Request $request){
+        $produto = Produtos::find($id);
+        
+        if($produto==null){
+            return response()->json(["erro" => "Recurso não encontrado"], 404) ;
+        }
+        $produto->fill($request->all());
+        $produto->save();
+
+        return response()->json($produto) ;
+        
+    }
+
+    public function adicionarQuantidade(int $id, Request $request){
+        $produto = Produtos::find($id);
+
+        $produto->quantidade = $produto->quantidade + $request->valor ;
+        $produto->save();
+
+        return $produto ;
+    }
+
+    public function removerQuantidade(int $id, Request $request){
+        $produto = Produtos::find($id);
+
+        if($request->valor > $produto->quantidade){
+            return response()->json(["erro" => "Quantidade inválida"], 404);
+        }
+
+        $produto->quantidade = $produto->quantidade - $request->valor ;
+        $produto->save();
+
+        return $produto ;
+    }
     
 }
