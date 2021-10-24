@@ -45,6 +45,9 @@ Agora é só rodar :
 php -S localhost:8080 -t public
 ```
 
+### Ps. Documentação das rotas foi feita no Insomnia: 
+[O arquivo está na raiz do projeto](https://github.com/sankassio99/inventory-manager-api-88ss5kai/blob/master/Insomnia-documenter.json)
+
 # Sobre o Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
