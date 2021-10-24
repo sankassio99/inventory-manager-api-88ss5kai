@@ -3,6 +3,7 @@
 
 - PHP - 7.4.16
 - Laravel Framework Lumen (8.3.1) (Laravel Components ^8.0)
+- Composer version 2.0.12
 
 ### Configurando o projeto
 
