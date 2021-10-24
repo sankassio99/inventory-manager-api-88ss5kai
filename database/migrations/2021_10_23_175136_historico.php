@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Produto extends Migration
+class Historico extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,19 @@ class Produto extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('produto', function (Blueprint $table) {
+        Schema::create('historico', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nome');
-            $table->string('modelo');
-            $table->string('marca');
-            $table->string('SKU');
+
             $table->integer('quantidade');
-            
-            $table->timestamps();
+            $table->dateTime('data');
+            $table->enum('tipo', ['REMOVIDO', 'ADICIONADO']);
+            $table->integer('produto_id');
+
+            $table->foreign('produto_id')
+                ->references('id')
+                ->on('produto');
+
+            // $table->timestamps();
         });
     }
 

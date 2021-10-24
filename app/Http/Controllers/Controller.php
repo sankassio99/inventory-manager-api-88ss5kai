@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Produtos;
+use App\Models\Produto;
+use App\Models\Historico;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    protected $historicoController ;
+    protected $produto ;
+
+    public function __construct(Produto $produto, HistoricoController $historicoController)
+    {
+        $this->historicoController = $historicoController ;
+        $this->produto = $produto ;
+    }
+
     public function index(){
-        $produtos = Produtos::get();
+        $produtos = $this->produto->get();
         return $produtos ;
     }   
 
@@ -22,14 +32,14 @@ class Controller extends BaseController
 
         return response()
         ->json(
-            Produtos::create($request->all()),
+            $this->produto->create($request->all()),
             201
         );
     }
 
     public function update(int $id, Request $request){
-        $produto = Produtos::find($id);
-        
+        $produto = $this->produto->find($id);
+
         if($produto==null){
             return response()->json(["erro" => "Recurso não encontrado"], 404) ;
         }
@@ -41,16 +51,22 @@ class Controller extends BaseController
     }
 
     public function adicionarQuantidade(int $id, Request $request){
-        $produto = Produtos::find($id);
+        $produto = $this->produto->find($id);
 
         $produto->quantidade = $produto->quantidade + $request->valor ;
         $produto->save();
+
+        $this->historicoController->movimentacao(
+            $request->valor, 
+            $produto->id,
+            $produto->updated_at->toDateTimeString(), 
+            "ADICIONADO");
 
         return $produto ;
     }
 
     public function removerQuantidade(int $id, Request $request){
-        $produto = Produtos::find($id);
+        $produto = $this->produto->find($id);
 
         if($request->valor > $produto->quantidade){
             return response()->json(["erro" => "Quantidade inválida"], 404);
@@ -59,7 +75,12 @@ class Controller extends BaseController
         $produto->quantidade = $produto->quantidade - $request->valor ;
         $produto->save();
 
+        $this->historicoController->movimentacao(
+            $request->valor, 
+            $produto->id,
+            $produto->updated_at->toDateTimeString(), 
+            "REMOVIDO");
+
         return $produto ;
     }
-    
 }
