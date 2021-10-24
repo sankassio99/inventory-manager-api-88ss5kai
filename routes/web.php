@@ -14,11 +14,16 @@
 */
 
 $router->group(['prefix' => '/api'], function () use ($router) {
+
     $router->group(['prefix' => '/produto'], function () use ($router) {
         $router->get('', 'Controller@index');
         $router->post('', 'Controller@store');
         $router->put('/{id}', 'Controller@update');
         $router->put('/add/{id}', 'Controller@adicionarQuantidade');
         $router->put('/remove/{id}', 'Controller@removerQuantidade');
+    });
+
+    $router->group(['prefix' => '/historico'], function () use ($router) {
+        $router->get('', 'HistoricoController@index');
     });
 });
