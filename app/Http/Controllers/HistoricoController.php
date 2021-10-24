@@ -20,9 +20,12 @@ class HistoricoController extends Controller
 
     public function index(){
         // return Historico::with('produto')->get();
-        return $this->historico->join('produto','produto.id', '=', 'historico.produto_id')
+        $historico = $this->historico
+            ->join('produto','produto.id', '=', 'historico.produto_id')
             ->select('historico.id', 'historico.quantidade' , 'produto.SKU', 'tipo', 'data')
             ->get();
+
+        return response()->json($historico);
 
     }
 
